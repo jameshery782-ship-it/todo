@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Todo List</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; justify-content: center; padding: 40px 16px; }
+  .app { background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.08); padding: 32px; width: 100%; max-width: 480px; }
+  h1 { font-size: 24px; margin-bottom: 20px; text-align: center; }
+  .row { display: flex; gap: 8px; margin-bottom: 20px; }
+  input[type=text] { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+  button { padding: 12px 20px; border: none; border-radius: 8px; background: #000; color: #fff; font-size: 16px; cursor: pointer; }
+  button:hover { opacity: .85; }
+  ul { list-style: none; }
+  li { display: flex; align-items: center; gap: 10px; padding: 12px; border-bottom: 1px solid #eee; font-size: 16px; }
+  li.done span { text-decoration: line-through; color: #999; }
+  li button { background: #ff4444; padding: 6px 12px; font-size: 14px; margin-left: auto; }
+  .empty { text-align: center; color: #999; padding: 20px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>My Todo List</h1>
+  <div class="row">
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <button onclick="addTask()">Add</button>
+  </div>
+  <ul id="taskList"></ul>
+  <p class="empty" id="emptyMsg">No tasks yet. Add one above!</p>
+</div>
+<script>
+  const input = document.getElementById('taskInput');
+  const list = document.getElementById('taskList');
+  const emptyMsg = document.getElementById('emptyMsg');
+  function addTask() {
+    const text = input.value.trim();
+    if (!text) return;
+    emptyMsg.style.display = 'none';
+    const li = document.createElement('li');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.onchange = () => li.classList.toggle('done', cb.checked);
+    const span = document.createElement('span');
+    span.textContent = text;
+    const del = document.createElement('button');
+    del.textContent = 'Delete';
+    del.onclick = () => { li.remove(); if (!list.children.length) emptyMsg.style.display = 'block'; };
+    li.append(cb, span, del);
+    list.appendChild(li);
+    input.value = '';
+    input.focus();
+  }
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+</script>
+</body>
+</html>
